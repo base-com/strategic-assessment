@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Initial Strategic Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: single reading column, numbered sections, hypothesis cards, tables for segments and KPIs */
+:root {
+  --bg: #f6f7f8;
+  --surface: #ffffff;
+  --ink: #17212b;
+  --muted: #5b6672;
+  --line: #dde2e7;
+  --accent: #0d5c63;
+  --accent-soft: #e2f0f1;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12181d;
+    --surface: #1a222a;
+    --ink: #e8edf1;
+    --muted: #9aa6b2;
+    --line: #2b3640;
+    --accent: #5fc0c8;
+    --accent-soft: #1d3a3e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12181d;
+  --surface: #1a222a;
+  --ink: #e8edf1;
+  --muted: #9aa6b2;
+  --line: #2b3640;
+  --accent: #5fc0c8;
+  --accent-soft: #1d3a3e;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.wrap { max-width: 860px; margin: 0 auto; padding: 48px 20px 80px; }
+
+header { padding-bottom: 28px; border-bottom: 2px solid var(--ink); margin-bottom: 36px; }
+.kicker { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(30px, 5vw, 44px); line-height: 1.1; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 28px; line-height: 1.2; margin: 56px 0 16px; text-wrap: balance; }
+h2:first-child { margin-top: 0; }
+h2 .num { color: var(--accent); margin-right: 10px; }
+h3 { font-size: 17px; margin: 24px 0 8px; font-weight: 600; }
+p { margin: 0 0 14px; max-width: 68ch; }
+ul, ol { margin: 0 0 16px; padding-left: 22px; max-width: 68ch; }
+li { margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+
+.lede { font-size: 18px; max-width: 64ch; }
+.label { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin: 18px 0 6px; }
+
+.question { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 18px 0; max-width: none; }
+.question p { margin: 0; max-width: none; }
+.question .label { margin: 0 0 6px; color: var(--accent); }
+.question .q { font-family: var(--font-display); font-size: 21px; line-height: 1.35; }
+
+.hyps { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: 8px; padding: 20px 22px; }
+.card h3 { margin: 0 0 10px; font-family: var(--font-display); font-size: 21px; line-height: 1.25; }
+.card .tag { display: inline-block; font-family: var(--font-body); font-size: 12px; font-weight: 600; background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 1px 7px; margin-right: 8px; vertical-align: 2px; }
+.card p, .card ul, .card ol { max-width: none; }
+.card .objective { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line); }
+.card .objective strong { color: var(--accent); }
+
+.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; margin: 8px 0 18px; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; min-width: 480px; }
+th, td { text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--accent-soft); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; white-space: nowrap; }
+
+.dimlist { list-style: none; padding: 0; max-width: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; }
+.dimlist li { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; }
+.dimlist strong { color: var(--accent); }
+
+.collab { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 22px; margin: 16px 0; }
+.collab > h3 { margin-top: 0; font-family: var(--font-display); font-size: 21px; }
+.collab p, .collab ul, .collab ol { max-width: none; }
+.team { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+.team:first-of-type { border-top: 0; padding-top: 0; }
+.team h4 { margin: 0 0 6px; font-size: 16px; }
+.team h4 span { color: var(--accent); }
+
+.chain { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0 6px; padding: 0; list-style: none; max-width: none; }
+.chain li { margin: 0; background: var(--accent); color: var(--bg); font-weight: 600; border-radius: 999px; padding: 6px 16px; font-size: 15px; }
+.chain .plus { color: var(--muted); font-weight: 600; }
+
+.closing { margin-top: 24px; padding: 24px 26px; background: var(--ink); color: var(--bg); border-radius: 8px; }
+.closing p { max-width: none; margin: 0; font-family: var(--font-display); font-size: 20px; line-height: 1.4; }
+.note { margin-top: 18px; color: var(--muted); font-style: italic; }
+
+p, li, td { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; }
+p.label, .kicker { text-align: left; hyphens: none; }
+
+@media (max-width: 480px) {
+  .wrap { padding: 32px 16px 60px; }
+  .card { padding: 16px; }
+  .collab { padding: 16px; }
+  td:first-child { white-space: normal; }
+}
+@media print { body { background: #fff; } .card, .collab, .tablewrap { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">Base.com</p>
+  <h1>Initial Strategic Assessment &amp; Growth Approach</h1>
+</header>
+
+<main>
+
+<section id="ambition">
+  <h2><span class="num">1.</span>Overall ambition</h2>
+  <p class="lede">Accelerate revenue growth by maximising the value of existing customers, improving retention and accelerating the activation and growth of new customers.</p>
+  <div class="question">
+    <p class="label">My initial thinking is built around one central question</p>
+    <p class="q">How can we generate more value from our existing customer base while making the business more scalable and better positioned to acquire and grow the right customers?</p>
+  </div>
+  <p>I would approach this through a hypothesis-led process: understand what is working today, identify opportunities and bottlenecks, validate assumptions through data and customer conversations, and prioritise actions according to their potential business impact.</p>
+</section>
+
+<section id="hypotheses">
+  <h2><span class="num">2.</span>Initial business hypotheses and opportunities</h2>
+  <div class="hyps">
+
+    <article class="card" id="h1">
+      <h3><span class="tag">H1</span>Unlock additional revenue from existing customers</h3>
+      <p>There may be untapped growth potential within the existing customer base.</p>
+      <p class="label">I would investigate</p>
+      <ul>
+        <li>Revenue contribution and evolution by customer.</li>
+        <li>Additional integrations, functionalities and services that could generate value.</li>
+        <li>Underutilised platform capabilities.</li>
+        <li>Customer growth ambitions and operational needs.</li>
+      </ul>
+      <p class="objective"><strong>Objective:</strong> Identify and prioritise account expansion opportunities, with a clear understanding of their potential revenue contribution (from initial data gathered by Sales).</p>
+    </article>
+
+    <article class="card" id="h2">
+      <h3><span class="tag">H2</span>Improve customer adoption, retention and loyalty</h3>
+      <p>Some customers may not fully exploit Base's capabilities.</p>
+      <p class="label">I would analyse</p>
+      <ul>
+        <li>Feature adoption, active usage.</li>
+        <li>Evolution of transaction volumes and revenue.</li>
+        <li>Recurring technical or operational issues.</li>
+        <li>Reasons behind churn and revenue contraction.</li>
+      </ul>
+      <p class="objective"><strong>Objective:</strong> Increase the value customers get from Base, identify risks earlier and develop a more proactive approach to customer retention and growth.</p>
+    </article>
+
+    <article class="card" id="h3">
+      <h3><span class="tag">H3</span>Make bespoke implementations more scalable</h3>
+      <p>Bespoke customer requirements can create value and differentiation, but they can also increase implementation time and complexity and cost.</p>
+      <p class="label">I would work with the Implementation team to identify</p>
+      <ul>
+        <li>Successful implementations and configurations.</li>
+        <li>Integrations and functionalities repeatedly requested.</li>
+        <li>Recurring customer requirements and operational workflows.</li>
+        <li>Developments that could be reused or adapted across customers.</li>
+        <li>Opportunities to package existing capabilities into repeatable solutions.</li>
+      </ul>
+      <p class="objective"><strong>Objective:</strong> Create additional monetisation opportunities.</p>
+    </article>
+
+    <article class="card" id="h4">
+      <h3><span class="tag">H4</span>Accelerate customer activation and time to revenue</h3>
+      <p>Getting a customer live is only the first milestone. The real objective is to get them to their expected operational volume as quickly as possible.</p>
+      <p class="label">I would review</p>
+      <ul>
+        <li>Time from contract signature to go-live.</li>
+        <li>Time to first transaction and full operational volume.</li>
+        <li>Recurring implementation and integration bottlenecks.</li>
+        <li>Technical dependencies and customer-side constraints.</li>
+        <li>Handover between Sales, Implementation and Customer Success.</li>
+      </ul>
+      <p class="objective"><strong>Objective:</strong> Reduce time to value, improve the onboarding experience and accelerate revenue generation.</p>
+    </article>
+
+    <article class="card" id="h5">
+      <h3><span class="tag">H5</span>Use customer data to improve acquisition quality</h3>
+      <p>Understanding the characteristics of our most successful customers can help refine the ICP and improve prospect qualification.</p>
+      <p class="label">I would compare customers based on</p>
+      <ul>
+        <li>Business maturity.</li>
+        <li>Revenue and growth trajectory.</li>
+        <li>Transaction volumes and product adoption.</li>
+        <li>Retention and expansion.</li>
+        <li>Operational complexity.</li>
+      </ul>
+      <p class="objective">The objective is to identify common characteristics among the strongest-performing accounts and share these insights with Sales to support ICP refinement and better prospect qualification.</p>
+    </article>
+
+    <article class="card" id="h6">
+      <h3><span class="tag">H6</span>Combine technology with expertise</h3>
+      <p>There may be an opportunity to strengthen Base's differentiation by combining its technological capabilities and operational data with deeper expertise.</p>
+      <p class="label">Potential areas to explore include</p>
+      <ul>
+        <li>Operational performance diagnostics.</li>
+        <li>Marketplace and inventory optimisation.</li>
+        <li>Identification of order and fulfilment bottlenecks.</li>
+        <li>Automation of repetitive operational tasks.</li>
+        <li>AI-assisted analysis, recommendations and workflows.</li>
+        <li>AI agents capable of executing authorised operational tasks through APIs and potentially MCP.</li>
+      </ul>
+      <p class="objective">The longer-term ambition could be helping merchants understand, optimise and improve their performance.</p>
+    </article>
+
+  </div>
+</section>
+
+<section id="segmentation">
+  <h2><span class="num">3.</span>Customer base segmentation and prioritisation</h2>
+  <p>I would start by segmenting the existing customer base to understand where the greatest opportunities and risks lie.</p>
+  <p class="label">The analysis would consider four dimensions</p>
+  <ul class="dimlist">
+    <li><strong>Current value:</strong> Revenue contribution and transaction volumes.</li>
+    <li><strong>Growth potential:</strong> Expansion opportunities and business ambitions.</li>
+    <li><strong>Customer health:</strong> Adoption, engagement and retention risks.</li>
+    <li><strong>Operational complexity:</strong> Implementation effort, support requirements and cost to serve.</li>
+  </ul>
+  <p>This would help identify four main customer profiles:</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Customer segment</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td>High-performing customers</td><td>Protect relationships and identify further expansion opportunities.</td></tr>
+        <tr><td>High-growth-potential customers</td><td>Develop targeted plans to accelerate revenue and adoption.</td></tr>
+        <tr><td>Under-adopting customers</td><td>Identify usage gaps and improve the value they get from Base.</td></tr>
+        <tr><td>At-risk customers</td><td>Address declining performance and protect recurring revenue.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>The objective is to move towards a more targeted customer strategy, allocating resources where they can generate the greatest commercial impact.</p>
+  <p>This segmentation would also provide valuable insights to Sales to help refine the ICP and improve acquisition quality.</p>
+</section>
+
+<section id="approach">
+  <h2><span class="num">4.</span>How I would approach it</h2>
+  <p>I see three complementary workstreams.</p>
+
+  <div class="collab">
+    <h3>A. Internal diagnosis and cross-functional collaboration</h3>
+    <p>Work closely with the different teams to understand business performance, customer needs and operational constraints.</p>
+
+    <div class="team">
+      <h4>Sales <span>– Pierre and Thibault</span></h4>
+      <ul>
+        <li>Understand customer acquisition, segmentation and commercial performance.</li>
+        <li>Identify existing customer expansion opportunities.</li>
+        <li>Share insights from successful accounts to support ICP refinement.</li>
+      </ul>
+    </div>
+    <div class="team">
+      <h4>Implementation <span>– Cyril</span></h4>
+      <ul>
+        <li>Understand the onboarding journey and technical complexity.</li>
+        <li>Identify recurring bottlenecks and bespoke requirements.</li>
+        <li>Assess which configurations, integrations and developments can be reused.</li>
+        <li>Understand implementation effort, cost and resource constraints.</li>
+      </ul>
+    </div>
+    <div class="team">
+      <h4>Customer Success <span>– Juliette/Myself</span></h4>
+      <ul>
+        <li>Understand customer health, adoption and satisfaction.</li>
+        <li>Identify churn risks and revenue contraction.</li>
+        <li>Review how growth opportunities are identified and managed.</li>
+        <li>Connect customer feedback with commercial opportunities.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="collab">
+    <h3>B. Direct customer engagement</h3>
+    <p>Internal data will help identify opportunities, but it will not always explain why customers behave as they do.</p>
+    <p>I would meet customers across the different segments: high-performing accounts, customers with growth potential, under-adopting customers and customers experiencing operational difficulties.</p>
+    <p class="label">Conversations would focus on</p>
+    <ul>
+      <li>Their business objectives and growth ambitions.</li>
+      <li>Their experience with Base and what they value most.</li>
+      <li>Operational challenges and processes that remain manual.</li>
+      <li>What prevents them from growing faster.</li>
+      <li>Capabilities or services that could create additional value.</li>
+      <li>Where automation, integrations or AI could improve their operations.</li>
+    </ul>
+    <p>The objective is to understand the underlying business problems, identify recurring patterns and opportunities that may not be visible through internal data alone.</p>
+  </div>
+
+  <div class="collab">
+    <h3>C. From customer insights to scalable commercial opportunities</h3>
+    <p class="label" style="margin-top:0">For each recurring customer need, I would assess</p>
+    <ol>
+      <li>Is this a problem shared by several customers?</li>
+      <li>Can an existing capability/feature address it?</li>
+      <li>Can the solution be reused or adapted?</li>
+      <li>What would it cost to deliver and maintain?</li>
+      <li>Does it improve retention, generate additional revenue or reduce cost to serve?</li>
+      <li>Could it become part of a repeatable commercial proposition?</li>
+    </ol>
+    <p>The objective is to connect customer experience, technical feasibility and commercial value rather than simply collect feedback or feature requests.</p>
+  </div>
+</section>
+
+<section id="kpis">
+  <h2><span class="num">5.</span>Measuring performance</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Business objective</th><th>Key indicators</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue growth</td><td>MRR, ARR, expansion revenue, revenue per customer</td></tr>
+        <tr><td>Retention</td><td>NRR, GRR, customer and revenue churn</td></tr>
+        <tr><td>Adoption</td><td>Feature adoption, active usage, integrations, transaction volumes</td></tr>
+        <tr><td>Activation</td><td>Time to go-live, time to first transaction, time to full volume</td></tr>
+        <tr><td>Scalability</td><td>Implementation cost, cost to serve, gross margin per customer</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>I would also introduce customer cohort analysis to understand revenue evolution over 3, 6 and 12 months, identify the strongest-performing segments and understand what differentiates successful customers.</p>
+  <p>Recurring revenue and non-recurring implementation should be tracked separately to ensure consistent performance measurement.</p>
+  <p>Targets would be established once the current baseline and data quality are understood.</p>
+</section>
+
+<section id="perspective">
+  <h2><span class="num">6.</span>Overall perspective</h2>
+  <ul class="chain">
+    <li>Customer understanding</li><span class="plus" aria-hidden="true">+</span>
+    <li>E-commerce expertise</li><span class="plus" aria-hidden="true">+</span>
+    <li>Technology</li><span class="plus" aria-hidden="true">+</span>
+    <li>Operational scalability</li>
+  </ul>
+  <p>The ambition is to understand how Base can help customers grow, capture more of that value commercially and build solutions that can be replicated across the customer base.</p>
+  <div class="closing">
+    <p>The objective is to understand how we can make every existing customer more valuable to Base, while making Base increasingly valuable to every customer.</p>
+  </div>
+  <p class="note">These are my initial hypotheses, to be definitely challenged and refined with the team, customer feedback and actual business data.</p>
+</section>
+
+</main>
+</div>
+</body>
+</html>
